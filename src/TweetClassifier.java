@@ -1,7 +1,10 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
+import twitter4j.*;
+import twitter4j.TwitterException;
 
 public class TweetClassifier
 {
@@ -60,10 +63,18 @@ public class TweetClassifier
 		double positiveSentimentProbability;
 		for(String word: arrayToClassify)
 		{
+			if(positiveProbabilityHolder.get(word) == null || negativeProbabilityHolder.get(word) == null)
+			{
+				positiveWordProbability = positiveWordProbability * 1;
+				negativeWordProbability = negativeWordProbability * 1;
+			}
+			else
+			{	
 			positiveWordProbability = positiveWordProbability * positiveProbabilityHolder.get(word);
 			negativeWordProbability = negativeWordProbability * negativeProbabilityHolder.get(word);
+			}
 		}
-		
+
 		positiveSentimentProbability = (positiveWordProbability * positiveProbability)/((positiveWordProbability * positiveProbability)
 				+ negativeWordProbability * negativeProbability);
 		
@@ -145,18 +156,38 @@ public class TweetClassifier
 				double positiveWordProbability = (double)positiveValueHolder / positiveWordCount;
 				positiveProbabilityHolder.put(key, positiveWordProbability);
 			}
-			System.out.println("Positive Tweets: " + positiveTweetCount);
-			System.out.println("Negative Tweets: " + negativeTweetCount);
-			System.out.println("Positive Word Count: " + positiveWordCount);
-			System.out.println("Negative Word Count: " + negativeWordCount);
-			double test = negativeProbabilityHolder.get("love");
-			double testPos = positiveProbabilityHolder.get("love");
-			System.out.println("" + test);
-			System.out.println("" + testPos);
+			System.out.println("Trained Positive Tweets: " + positiveTweetCount);
+			System.out.println("Trained Negative Tweets: " + negativeTweetCount);
+			System.out.println("Trained Positive Word Count: " + positiveWordCount);
+			System.out.println("Trained Negative Word Count: " + negativeWordCount);
+//			double test = negativeProbabilityHolder.get("love");
+//			double testPos = positiveProbabilityHolder.get("love");
+//			System.out.println("" + test);
+//			System.out.println("" + testPos);
 		}
-		catch(IOException e)
+		catch(FileNotFoundException e)
 		{
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public double findPercentagePositivity(double positiveTweets, double negativeTweets)
+	{
+		double percentagePositivity = 100*(positiveTweets / (positiveTweets + negativeTweets));
+		if(percentagePositivity > 50 && positiveTweets > 0 && negativeTweets > 0)
+		{
+			System.out.println("Wow, mostly happy!");
+		}
+		else if (percentagePositivity > 0 && positiveTweets > 0 && negativeTweets > 0)
+		{
+			System.out.println("Hmm, could be happier!");
+		}
+		else
+		{
+			System.out.println("Odd. It can't be that negative!");
+			return 0.0;
+		}
+		return percentagePositivity; 
 	}
 }

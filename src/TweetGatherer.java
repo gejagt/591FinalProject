@@ -7,6 +7,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 
+import java.awt.List;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -36,12 +37,12 @@ public class TweetGatherer
 	public void setStatuses(ArrayList<Status> statuses) {
 		this.statuses = statuses;
 	}
-    public void locationQuery(String searchString, double latitude, double longitude, String date)
+    public ArrayList<String> getWordDateQuery(String searchString, String date, int quantity)
     {
     	Query queryOfInterest = new Query(searchString);
-    	queryOfInterest.setCount(100);
-//    	queryOfInterest.setGeoCode(new GeoLocation(latitude, longitude), 50, Query.MILES);
+    	queryOfInterest.setCount(quantity);
     	queryOfInterest.setSince(date);
+    	ArrayList<String> tweetAggregate = new ArrayList<String>();
     	
     	try
     	{
@@ -51,12 +52,35 @@ public class TweetGatherer
     		for(Status tweet: result.getTweets())
     		{
     			counter++;
-    			System.out.println("Tweet # " + counter + ": " + tweet.getText());
+    			tweetAggregate.add(tweet.getText());
     		}
+
     	}
     	catch(TwitterException te)
     	{
     		te.printStackTrace();
     	}
+    	
+    	return tweetAggregate;
     }
+    
+//    public ArrayList<String> getSomeoneQuery(String searchUser)
+//    {
+//    	Paging paging = new Paging(1, 15);
+//    	ArrayList<String> pageStatuses = new ArrayList<String>();
+//    	try
+//    	{
+//        	Twitter unauthenticatedTwitter = new TwitterFactory().getInstance();
+//        	pageStatuses.addAll(unauthenticatedTwitter.getUserTimeline(searchUser, paging));
+//
+//    	}
+//    	catch(TwitterException te)
+//    	{
+//    		te.printStackTrace();
+//    	}
+//    	
+//    	return pageStatuses;
+
+
+//    }
 }
