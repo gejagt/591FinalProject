@@ -116,11 +116,7 @@ public class TweetClassifier
 	 */
 	public void calculateProbability(File file) throws FileNotFoundException
 	{
-//		int positiveTweetCount = 0;
-//		int negativeTweetCount = 0;
-//		int positiveWordCount = 0;
-//		int negativeWordCount = 0;
-//		
+
 		try
 		{
 			Scanner scanner = new Scanner(file);

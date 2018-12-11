@@ -9,7 +9,11 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
-
+/**
+ * TweetGathererTest tests methods of the TweetGatherer class with JUnit tests
+ * @author Charles
+ *
+ */
 class TweetGathererTest {
 	public static final String CONSUMER_KEY = "Nw80TNOxfinETYstIYkk85Zvc";
 	public static final String CONSUMER_SECRET = "iAKzkPsnlbJX6ttOXjuqfJ233DKGihpOcUE4psSELxTPdCxvbx";	

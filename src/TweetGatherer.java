@@ -13,6 +13,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * TweetGatherer class submits queries to TwitterAPI to scrape tweets
+ * @author Charles
+ *
+ */
 public class TweetGatherer 
 {
 	private Twitter twitter;

@@ -9,7 +9,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import twitter4j.TwitterException;
-
+/**
+ * TweetClassifierTest tests the methods of TweetClassifier with JUnit tests
+ * @author Charles
+ *
+ */
 class TweetClassifierTest 
 {
 	/**
