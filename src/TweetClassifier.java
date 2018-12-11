@@ -6,15 +6,28 @@ import java.util.Scanner;
 import twitter4j.*;
 import twitter4j.TwitterException;
 
+/**
+ * TweetClassifier applies Naive Bayes to create an implementation of the Bag of Words model, 
+ * the model widely known in natural language processing and information retrieval.
+ * TweetClassifier objects hold probabilities to calculate the likelihood of a word being used positively or negatively.
+ * The method classify() determines the aforementioned probabilities after calculateProbability is trained with a csv of labeled tweets.
+ */
 public class TweetClassifier
 {
-	public double positiveProbability;
-	public double negativeProbability;
+	public static double positiveProbability;
+	public static double negativeProbability;
+	public static int positiveTweetCount = 0;
+	public static int negativeTweetCount = 0;
+	public static int positiveWordCount = 0;
+	public static int negativeWordCount = 0;
 	private HashMap<String, Integer> positiveCountHolder;
 	private HashMap<String, Double> positiveProbabilityHolder;
 	private HashMap<String, Integer> negativeCountHolder;
 	private HashMap<String, Double> negativeProbabilityHolder;
 	
+	/**
+	 * Constructor for TweetClassifier
+	 */
 	TweetClassifier()
 	{
 		positiveCountHolder = new HashMap<String, Integer>();
@@ -22,39 +35,44 @@ public class TweetClassifier
 		negativeCountHolder = new HashMap<String, Integer>();
 		negativeProbabilityHolder = new HashMap<String, Double>();	
 	}
-	
-	public HashMap<String, Integer> getPositiveCountHolder() {
+	/**
+	 *  Gets HashMap of positive words and their counts
+	 * @return HashMap of positive words and their counts
+	 */
+	public HashMap<String, Integer> getPositiveCountHolder() 
+	{
 		return positiveCountHolder;
 	}
-
-	public void setPositiveCountHolder(HashMap<String, Integer> positiveCountHolder) {
-		this.positiveCountHolder = positiveCountHolder;
-	}
-
-	public HashMap<String, Double> getPositiveProbabilityHolder() {
+	/**
+	 * Gets HashMap of positive words and their probabilities
+	 * @return HashMap of positive words and their probabilities
+	 */
+	public HashMap<String, Double> getPositiveProbabilityHolder() 
+	{
 		return positiveProbabilityHolder;
 	}
-
-	public void setPositiveProbabilityHolder(HashMap<String, Double> positiveProbabilityHolder) {
-		this.positiveProbabilityHolder = positiveProbabilityHolder;
-	}
-
-	public HashMap<String, Integer> getNegativeCountHolder() {
+	/**
+	 * Gets HashMap of negative words and their counts
+	 * @return HashMap of negative words and their counts
+	 */
+	public HashMap<String, Integer> getNegativeCountHolder() 
+	{
 		return negativeCountHolder;
 	}
 
-	public void setNegativeCountHolder(HashMap<String, Integer> negativeCountHolder) {
-		this.negativeCountHolder = negativeCountHolder;
-	}
-
+	/**
+	 * Gets HashMap of negative words and their probabilities
+	 * @return HashMap of negative words and their probabilities
+	 */
 	public HashMap<String, Double> getNegativeProbabilityHolder() {
 		return negativeProbabilityHolder;
 	}
 
-	public void setNegativeProbabilityHolder(HashMap<String, Double> negativeProbabilityHolder) {
-		this.negativeProbabilityHolder = negativeProbabilityHolder;
-	}
-
+	/**
+	 * classify will take a String and return the probability that the string is used positively, applying Bayes
+	 * @param tweet is a String that is passed in to be analyzed, must be a single word
+	 * @return probability that the string is used positively, returned as a double
+	 */
 	public double classify(String tweet)
 	{
 		String[] arrayToClassify = findTweetArray(tweet);
@@ -80,20 +98,29 @@ public class TweetClassifier
 		
 		return positiveSentimentProbability;
 	}
-	
+	/**
+	 * Parses a tweet String and breaks it down into a String array for analysis
+	 * @param tweet is a String from a tweet to be broken down
+	 * @return Array of Strings is returned to be put into HashMaps for training
+	 */
 	public String[] findTweetArray(String tweet)
 	{
 		String tweetLowerCase = tweet.toLowerCase();
 		String[] tweetWordsArray = tweetLowerCase.split(("[.;,: -?!()\\[\\]\b\t\n\f\r\"\\|]+"));
 		return tweetWordsArray;
 	}
-	public void calculateProbability(File file)
+	/**
+	 * Given a pre-labeled file of Tweets as a training set, calculateProbability calculates all the relevant probabilities for using Naive Bayes
+	 * @param file Tweets training set in csv
+	 * @throws FileNotFoundException if File cannot be find, exception is thrown
+	 */
+	public void calculateProbability(File file) throws FileNotFoundException
 	{
-		int positiveTweetCount = 0;
-		int negativeTweetCount = 0;
-		int positiveWordCount = 0;
-		int negativeWordCount = 0;
-		
+//		int positiveTweetCount = 0;
+//		int negativeTweetCount = 0;
+//		int positiveWordCount = 0;
+//		int negativeWordCount = 0;
+//		
 		try
 		{
 			Scanner scanner = new Scanner(file);
@@ -156,14 +183,7 @@ public class TweetClassifier
 				double positiveWordProbability = (double)positiveValueHolder / positiveWordCount;
 				positiveProbabilityHolder.put(key, positiveWordProbability);
 			}
-			System.out.println("Trained Positive Tweets: " + positiveTweetCount);
-			System.out.println("Trained Negative Tweets: " + negativeTweetCount);
-			System.out.println("Trained Positive Word Count: " + positiveWordCount);
-			System.out.println("Trained Negative Word Count: " + negativeWordCount);
-//			double test = negativeProbabilityHolder.get("love");
-//			double testPos = positiveProbabilityHolder.get("love");
-//			System.out.println("" + test);
-//			System.out.println("" + testPos);
+
 		}
 		catch(FileNotFoundException e)
 		{
@@ -171,23 +191,22 @@ public class TweetClassifier
 		}
 		
 	}
-	
+	/**
+	 * findPercentagePositivity tracks the total percentage of tweets found that are positive
+	 * @param positiveTweets number of positive tweets from query
+	 * @param negativeTweets number of negative tweets from query
+	 * @return percentage of tweets that are positive
+	 */
 	public double findPercentagePositivity(double positiveTweets, double negativeTweets)
 	{
 		double percentagePositivity = 100*(positiveTweets / (positiveTweets + negativeTweets));
-		if(percentagePositivity > 50 && positiveTweets > 0 && negativeTweets > 0)
+		if(percentagePositivity > 0 && positiveTweets >= 0 && negativeTweets >= 0)
 		{
-			System.out.println("Wow, mostly happy!");
-		}
-		else if (percentagePositivity > 0 && positiveTweets > 0 && negativeTweets > 0)
-		{
-			System.out.println("Hmm, could be happier!");
+			return percentagePositivity;
 		}
 		else
 		{
-			System.out.println("Odd. It can't be that negative!");
 			return 0.0;
 		}
-		return percentagePositivity; 
 	}
 }
