@@ -1,0 +1,8 @@
+The name of this project is TwitterSentimentStatistician. Mostly simply put, TwitterSentimentStatistician is a classifier trained with 1.6M labeled tweets in the attached file.
+TwitterSentimentStatistician uses sentiment analysis (bag of words model with Naive Bayes) to determine how much of one's Twitter homepage is likely to be positive in sentiment 
+and how likely an individual tweet scraped from the Twitter API is likely to be positive. It can do this by logging into a user's Twitter account with the Twitter API, and then,
+going even further, TwitterSentimentStatistician is able to take a set of search term, date, and number of tweets desired in a query and return the relevant number of tweets 
+from that day containing the search term. Then, it is able to apply the same analyses mentioned earlier and calculate how likely it is each returned tweet is positive in sentiment 
+and what percentage of the tweets returned are positive in sentiment. This project is naturally limited by the assumptions made by Naive Bayes, specifically the idea that any two features are independent. 
+This is why it is called a "naive classifier." However, it has been previously shown that Naive Bayes can be perform quite well even sub-optimally; in other cases,
+it can even be performing what might be considered optimally despite the held assumptions being obviously untrue. Regardless, in any situation where data is abundant, Naive Bayes is a consideration to be made.
